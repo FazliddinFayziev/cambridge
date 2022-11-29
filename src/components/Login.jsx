@@ -8,8 +8,10 @@ const Login = () => {
   const navigate = useNavigate()
   const { currentUser } = useContext(AuthContext)
 
+  console.log(currentUser)
+
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && currentUser.uid) {
       navigate('/')
     }
   }, [currentUser])
