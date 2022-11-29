@@ -1,8 +1,36 @@
-import React from 'react'
+import { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { auth, provider } from '../config/firebase'
+import { AuthContext } from '../context/AuthContex'
 
 const Login = () => {
+  const navigate = useNavigate()
+  const { currentUser } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/')
+    }
+  }, [currentUser])
+
+  const signIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        GoogleAuthProvider.credentialFromResult(result)
+      })
+      .then(() => {
+        navigate('/')
+      })
+      .catch((error) => {
+        GoogleAuthProvider.credentialFromError(error)
+        console.error(error)
+      })
+  }
   return (
-    <div>Login</div>
+    <div>
+      <button onClick={signIn}>Login</button>
+    </div>
   )
 }
 
